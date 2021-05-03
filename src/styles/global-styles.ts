@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { mainBackGround } from '../app/themes/colors';
 
 export const GlobalStyle = createGlobalStyle`
   html,
@@ -8,7 +9,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: Roboto, 'Roboto', sans-serif;
+    background-color:${mainBackGround};
   }
 
   #root {
@@ -18,7 +20,7 @@ export const GlobalStyle = createGlobalStyle`
 
   p,
   label {
-    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-family: Roboto,'Roboto', sans-serif;
     line-height: 1.5em;
   }
 
