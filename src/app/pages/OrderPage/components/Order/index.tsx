@@ -19,18 +19,18 @@ import { ruble } from '../../../../constants/ruble';
 export function Order(props: { dish: Dish }) {
   return (
     <OrderComponent>
-      <Image src={props.dish.imageUrl} />
+      <Image src={props.dish.image} />
       <Description>
         <ColumnFlexbox>
-          <DishTitle>{props.dish.name}</DishTitle>
+          <DishTitle>{props.dish.title}</DishTitle>
           <DishComposition>{props.dish.composition}</DishComposition>
           <Hint>В 100 г продукта содержится:</Hint>
-          {props.dish.nutritionalValue && (
+          {props.dish.foodValue && (
             <FlexWithSpacing spacing={'38px'}>
-              <Hint>Белки: {props.dish.nutritionalValue.protein}</Hint>
-              <Hint>Жиры: {props.dish.nutritionalValue.fats}</Hint>
-              <Hint>Углеводы: {props.dish.nutritionalValue.carb}</Hint>
-              <Hint>{props.dish.nutritionalValue.energyValue}</Hint>
+              <Hint>Белки: {props.dish.foodValue.protein}</Hint>
+              <Hint>Жиры: {props.dish.foodValue.fats}</Hint>
+              <Hint>Углеводы: {props.dish.foodValue.carb}</Hint>
+              <Hint>{props.dish.foodValue.energyValue}</Hint>
             </FlexWithSpacing>
           )}
         </ColumnFlexbox>

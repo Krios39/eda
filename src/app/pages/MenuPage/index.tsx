@@ -6,6 +6,10 @@ import styled from 'styled-components';
 import { Flexbox, FlexWithSpacing } from '../../typography/flex';
 import { dishCardImageWidth } from '../../constants/sizes';
 import { Categories } from './components/Categories';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { profileSlice } from '../../../store/profile/slice';
+import { selectMenu } from '../../../store/profile/selectors';
 
 const dishes = [
   {
@@ -131,6 +135,13 @@ const dishes = [
 ];
 
 export function MenuPage() {
+  const dispatch = useDispatch();
+  const menu = useSelector(selectMenu);
+
+  useEffect(() => {
+    dispatch(profileSlice.actions.loadDishes());
+  }, []);
+
   return (
     <Page>
       <Helmet>
@@ -140,8 +151,8 @@ export function MenuPage() {
       <MenuPageContent>
         <Categories />
         <Dishes spacing={'58px'}>
-          {dishes.map((dish, index) => (
-            <DishCard key={index} dish={dish} />
+          {menu.map((dish, index) => (
+            <DishCard key={dish.id} dish={dish} />
           ))}
         </Dishes>
       </MenuPageContent>

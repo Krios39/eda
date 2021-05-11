@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Page } from '../../components/Page';
 import {
   CenteredFlex,
@@ -15,91 +15,17 @@ import {
   buttonBackgroundHover,
   mainWhite,
 } from '../../themes/colors';
-
-const dishes = [
-  {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
-    },
-  },
-  {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
-    },
-  },
-  {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
-    },
-  },
-  {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
-    },
-  },
-  {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
-    },
-  },
-];
+import { useSelector } from 'react-redux';
+import { selectMenu } from '../../../store/profile/selectors';
 
 export function OrderPage() {
+  const menu = useSelector(selectMenu);
+
   return (
     <Page alignItems={'flex-end'}>
       <OrderList spacing={'10px'}>
-        {dishes.map((dish, index) => (
-          <Order key={index} dish={dish} />
+        {menu.map((dish, index) => (
+          <Order key={dish.id} dish={dish} />
         ))}
       </OrderList>
       <Total spacing={'20px'}>

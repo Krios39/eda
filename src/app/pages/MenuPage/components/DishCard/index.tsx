@@ -19,15 +19,15 @@ import { Header, Hint, TextRegular } from '../../../../typography/text';
 export function DishCard(props: { dish: Dish }) {
   return (
     <DishCardComponent>
-      <Image src={props.dish.imageUrl} />
+      <Image src={props.dish.image} />
       <DishInfo>
-        <DishTitle>{props.dish.name}</DishTitle>
+        <DishTitle>{props.dish.title}</DishTitle>
         {props.dish.composition && (
           <DishComposition>{props.dish.composition}</DishComposition>
         )}
-        {(props.dish.nutritionalValue || props.dish.weight) && (
+        {(props.dish.foodValue || props.dish.weight) && (
           <NutritionalValueBox
-            nutritionalValue={props.dish.nutritionalValue}
+            nutritionalValue={props.dish.foodValue}
             weight={props.dish.weight}
           />
         )}
@@ -70,6 +70,7 @@ const DishComposition = styled.span`
 
 const DishInfo = styled(ColumnCenteredFlex)`
   padding: 10px;
+  width: 100%;
 `;
 
 const PriceText = styled.span`
