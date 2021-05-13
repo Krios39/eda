@@ -2,6 +2,7 @@ import { NutritionalValue } from './nutritionalValue';
 
 export interface Dish {
   id: number;
+  type: string;
   title: string;
   price: number;
   composition?: string;

@@ -19,14 +19,15 @@ import { useSelector } from 'react-redux';
 import { selectMenu } from '../../../store/profile/selectors';
 
 export function OrderPage() {
-  const menu = useSelector(selectMenu);
+  // const menu = useSelector(selectMenu);
 
+  const menu = [];
   return (
     <Page alignItems={'flex-end'}>
       <OrderList spacing={'10px'}>
-        {menu.map((dish, index) => (
-          <Order key={dish.id} dish={dish} />
-        ))}
+        {/*{menu.map((dish, index) => (*/}
+        {/*  <Order key={dish.id} dish={dish} />*/}
+        {/*))}*/}
       </OrderList>
       <Total spacing={'20px'}>
         <TotalText>Общая сумма заказа: 228 {ruble}</TotalText>

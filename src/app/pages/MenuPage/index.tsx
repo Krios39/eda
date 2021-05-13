@@ -1,145 +1,206 @@
 import { Page } from 'app/components/Page';
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { DishCard } from './components/DishCard';
 import styled from 'styled-components';
-import { Flexbox, FlexWithSpacing } from '../../typography/flex';
-import { dishCardImageWidth } from '../../constants/sizes';
-import { Categories } from './components/Categories';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { Flexbox } from '../../typography/flex';
+import { CategoriesList } from './components/CategoriesList';
+import { useDispatch } from 'react-redux';
+import { RefObject, useEffect, useState } from 'react';
 import { profileSlice } from '../../../store/profile/slice';
-import { selectMenu } from '../../../store/profile/selectors';
+import { Dish } from '../../../store/models/dish';
+import { Categories } from './components/Categories';
 
-const dishes = [
+const dishes: Dish[] = [
   {
     id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
+    title: 'fffffff',
+    type: 'fffff',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
     },
   },
   {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
+    id: 2,
+    title: 'fffffff',
+    type: 'fffff',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
     },
   },
   {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
+    id: 3,
+    title: 'fffffff',
+    type: 'fffff',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
     },
   },
   {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
+    id: 4,
+    title: 'fffffff',
+    type: 'fffff',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
     },
   },
   {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
+    id: 5,
+    title: 'aaaaaaa',
+    type: 'fffff',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
     },
   },
   {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
+    id: 6,
+    title: 'aaaaaaa',
+    type: 'aaaaaaa',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
     },
   },
   {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
+    id: 7,
+    title: 'aaaaaaa',
+    type: 'aaaaaaa',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
     },
   },
   {
-    id: 1,
-    name: 'Салат "Винегрет"',
-    price: 46,
-    weight: '130/20',
-    imageUrl: 'https://edatomsk.ru/images/delivery/items/24.jpg',
-    composition:
-      'Картофель, свёкла, горошек, капуста, огурец, морковь, лук, масло',
-    nutritionalValue: {
-      energyValue: '228',
-      protein: '228',
-      carb: '228',
-      fats: '228',
+    id: 8,
+    title: 'fffffff',
+    type: 'aaaaaaa',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
+    },
+  },
+  {
+    id: 9,
+    title: 'fffffff',
+    type: 'vvvvvv',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
+    },
+  },
+  {
+    id: 10,
+    title: 'fffffff',
+    type: 'vvvvvv',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
+    },
+  },
+  {
+    id: 11,
+    title: 'fffffff',
+    type: 'vvvvvv',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
+    },
+  },
+  {
+    id: 12,
+    title: 'fffffff',
+    type: 'vvvvvv',
+    price: 50,
+    composition: 'ffffffffffffff',
+    weight: 'fffff г.',
+    image: 'http://edatomsk.ru/images/delivery/items/307.jpg',
+    foodValue: {
+      fats: '20 г',
+      carb: '20 г',
+      protein: '20г',
+      energyValue: '20г',
     },
   },
 ];
 
 export function MenuPage() {
   const dispatch = useDispatch();
-  const menu = useSelector(selectMenu);
+
+  const [refs, setRefs] = useState<RefObject<HTMLDivElement>[]>([]);
 
   useEffect(() => {
-    dispatch(profileSlice.actions.loadDishes());
+    // dispatch(profileSlice.actions.loadDishes());
+    dispatch(profileSlice.actions.loadDishesSuccess({ dishes: dishes }));
   }, []);
 
   return (
@@ -149,12 +210,8 @@ export function MenuPage() {
         <meta name="description" content="A Boilerplate application homepage" />
       </Helmet>
       <MenuPageContent>
-        <Categories />
-        <Dishes spacing={'58px'}>
-          {menu.map((dish, index) => (
-            <DishCard key={dish.id} dish={dish} />
-          ))}
-        </Dishes>
+        <CategoriesList refs={refs} />
+        <Categories refs={refs} setRefs={setRefs} />
       </MenuPageContent>
     </Page>
   );
@@ -163,11 +220,4 @@ export function MenuPage() {
 const MenuPageContent = styled(Flexbox)`
   width: 100%;
   min-height: 100px;
-  //height: 100%;
-  //position: relative;
-`;
-
-const Dishes = styled(FlexWithSpacing)`
-  width: calc(3 * ${dishCardImageWidth} + 2 * 58px);
-  flex-wrap: wrap;
 `;
