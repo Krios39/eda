@@ -1,67 +1,71 @@
-import React, { useState } from 'react';
-import { ColumnFlexWithPadding, Flexbox } from '../../../../typography/flex';
+import React, { RefObject, SetStateAction, useEffect, useRef } from 'react';
+import {
+  ColumnCenteredFlex,
+  ColumnCenteredFlexWithPadding,
+  FlexWithSpacing,
+} from '../../../../typography/flex';
+import { DishCard } from '../DishCard';
+import { useSelector } from 'react-redux';
+import {
+  selectDishCategories,
+  selectMenu,
+} from '../../../../../store/profile/selectors';
 import styled from 'styled-components';
-import { mainBlack, mainGrey } from '../../../../themes/colors';
-import { Span } from 'app/typography/text';
+import { dishCardImageWidth } from '../../../../constants/sizes';
+import { Span } from '../../../../typography/text';
 
-const categories = [
-  'салаты и закуски',
-  'супы',
-  'вторые блюда',
-  'воки',
-  'гарниры',
-  'завтраки',
-  'соусы',
-];
-
-export function Categories() {
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    categories[0],
-  );
+export function Categories(props: {
+  refs: RefObject<HTMLDivElement>[];
+  setRefs: React.Dispatch<SetStateAction<RefObject<HTMLDivElement>[]>>;
+}) {
+  const categories = useSelector(selectDishCategories);
 
   return (
-    <div>
-      <CategoriesComponent spacing={'12px'}>
-        {categories.map((category, index) => (
-          <Category
-            key={index}
-            category={category}
-            isSelected={category === selectedCategory}
-            onClick={() => setSelectedCategory(category)}
-          />
-        ))}
-      </CategoriesComponent>
-    </div>
+    <CategoriesComponent>
+      {categories.map((category, index) => (
+        <Category category={category} setRefs={props.setRefs} key={index} />
+      ))}
+    </CategoriesComponent>
   );
 }
 
-const CategoriesComponent = styled(ColumnFlexWithPadding)`
-  margin-right: 150px;
-  width: 210px;
-  position: sticky;
-  top: 2rem;
-  min-height: 2em;
+const Dishes = styled(FlexWithSpacing)`
+  width: calc(3 * ${dishCardImageWidth} + 2 * 58px);
+  flex-wrap: wrap;
+`;
+
+const CategoryText = styled(Span)`
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 33px;
+  letter-spacing: 0.045em;
+  text-align: center;
+`;
+
+const CategoriesComponent = styled(ColumnCenteredFlex)`
+  margin-bottom: 50px;
 `;
 
 const Category = (props: {
-  isSelected: boolean;
   category: string;
-  onClick: () => void;
+  setRefs: React.Dispatch<SetStateAction<RefObject<HTMLDivElement>[]>>;
 }) => {
+  const menu = useSelector(selectMenu);
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    props.setRefs(prevState => [...prevState, ref]);
+  }, []);
+
   return (
-    <Flexbox onClick={props.onClick}>
-      <CategoryText
-        color={props.isSelected ? mainBlack : mainGrey}
-        isSelected={props.isSelected}
-      >
-        - {props.category}
-      </CategoryText>
-    </Flexbox>
+    <ColumnCenteredFlexWithPadding ref={ref} spacing={'22px'}>
+      <CategoryText>{props.category}</CategoryText>
+      <Dishes spacing={'58px'}>
+        {menu[props.category].map(dish => (
+          <DishCard key={dish.id} dish={dish} />
+        ))}
+      </Dishes>
+    </ColumnCenteredFlexWithPadding>
   );
 };
-
-const CategoryText = styled(Span)<{ isSelected: boolean }>`
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 21px;
-`;
