@@ -3,8 +3,6 @@ import { ProfileState } from '../models/profileState';
 import { UserData } from '../models/userData';
 import { DishesSet } from './models/dishesSet';
 import { DishPayload } from './models/dishPayload';
-import { SelectedDish } from '../models/selectedDish';
-import { SelectedDishPayload } from './models/selectedDishPayload';
 
 export const initialState: ProfileState = {
   userData: {
@@ -47,10 +45,30 @@ export const profileSlice = createSlice({
       });
       return state;
     },
-    removeDish(state, action: PayloadAction<SelectedDishPayload>) {
+    removeDish(state, action: PayloadAction<DishPayload>) {
       state.selectedDishes = state.selectedDishes.filter(
-        n => n !== action.payload.selectedDish,
+        n => n.dish.id !== action.payload.dish.id,
       );
+      return state;
+    },
+    addPortion(state, action: PayloadAction<DishPayload>) {
+      state.selectedDishes.find(
+        n => n.dish.id === action.payload.dish.id,
+      )!.count =
+        state.selectedDishes.find(n => n.dish.id === action.payload.dish.id)!
+          .count + 1;
+      return state;
+    },
+    removePortion(state, action: PayloadAction<DishPayload>) {
+      state.selectedDishes.find(
+        n => n.dish.id === action.payload.dish.id,
+      )!.count =
+        state.selectedDishes.find(n => n.dish.id === action.payload.dish.id)!
+          .count - 1;
+      return state;
+    },
+    loadProfileId(state, action) {
+      state.userData.userId = action.payload;
       return state;
     },
   },

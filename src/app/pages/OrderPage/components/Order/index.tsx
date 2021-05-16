@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   CenteredFlex,
@@ -9,44 +9,22 @@ import {
   VerticallyCenteredFlexWithSpaceBetween,
 } from '../../../../typography/flex';
 import { orderImageHeight, orderImageWidth } from '../../../../constants/sizes';
-import { Dish } from '../../../../../store/models/dish';
 import { ReactComponent as PlusIcon } from 'app/icons/plus.svg';
 import { ReactComponent as MinusIcon } from 'app/icons/minus.svg';
 import { ReactComponent as CloseIcon } from 'app/icons/close.svg';
 import { Hint, TextRegular } from '../../../../typography/text';
 import { ruble } from '../../../../constants/ruble';
+import { SelectedDish } from '../../../../../store/models/selectedDish';
+import { useDispatch } from 'react-redux';
+import { profileSlice } from '../../../../../store/profile/slice';
+import { getSelectedDishPrice } from '../../../../../store/profile/helpers';
 
-export function Order(props: { dish: Dish }) {
+export function Order(props: { selectedDish: SelectedDish }) {
   return (
     <OrderComponent>
-      <Image src={props.dish.image} />
-      <Description>
-        <ColumnFlexbox>
-          <DishTitle>{props.dish.title}</DishTitle>
-          <DishComposition>{props.dish.composition}</DishComposition>
-          <Hint>В 100 г продукта содержится:</Hint>
-          {props.dish.foodValue && (
-            <FlexWithSpacing spacing={'38px'}>
-              <Hint>Белки: {props.dish.foodValue.protein}</Hint>
-              <Hint>Жиры: {props.dish.foodValue.fats}</Hint>
-              <Hint>Углеводы: {props.dish.foodValue.carb}</Hint>
-              <Hint>{props.dish.foodValue.energyValue}</Hint>
-            </FlexWithSpacing>
-          )}
-        </ColumnFlexbox>
-
-        <ColumnFlexbox style={{ alignItems: 'flex-end' }}>
-          <CloseIcon />
-          <WeightAndPrice spacing={'3px'}>
-            <TextRegular>{props.dish.weight} г.</TextRegular>
-            <PriceText>
-              {props.dish.price} {ruble}
-            </PriceText>
-          </WeightAndPrice>
-        </ColumnFlexbox>
-      </Description>
+      <DishCard selectedDish={props.selectedDish} />
       <CounterBox>
-        <Counter />
+        <Counter selectedDish={props.selectedDish} />
       </CounterBox>
     </OrderComponent>
   );
@@ -80,11 +58,18 @@ const CounterBox = styled(CenteredFlex)`
   padding: 0 50px;
 `;
 
-const Counter = () => {
-  const [counter, setCounter] = useState<number>(1);
+const Counter = (props: { selectedDish: SelectedDish }) => {
+  const dispatch = useDispatch();
 
   const onMinusClick = () => {
-    if (counter > 1) setCounter(prevState => prevState - 1);
+    if (props.selectedDish.count > 1)
+      dispatch(
+        profileSlice.actions.removePortion({ dish: props.selectedDish.dish }),
+      );
+    else
+      dispatch(
+        profileSlice.actions.removeDish({ dish: props.selectedDish.dish }),
+      );
   };
 
   return (
@@ -92,11 +77,60 @@ const Counter = () => {
       <Minus onClick={onMinusClick}>
         <MinusIcon />
       </Minus>
-      {counter}
-      <Plus onClick={() => setCounter(prevState => prevState + 1)}>
+      {props.selectedDish.count}
+      <Plus
+        onClick={() =>
+          dispatch(
+            profileSlice.actions.addPortion({ dish: props.selectedDish.dish }),
+          )
+        }
+      >
         <PlusIcon />
       </Plus>
     </CounterComponent>
+  );
+};
+
+const DishCard = (props: { selectedDish: SelectedDish }) => {
+  const dispatch = useDispatch();
+
+  const onDeleteButtonClick = () => {
+    dispatch(
+      profileSlice.actions.removeDish({ dish: props.selectedDish.dish }),
+    );
+  };
+
+  return (
+    <>
+      <Image src={props.selectedDish.dish.image} />
+      <Description>
+        <ColumnFlexbox>
+          <DishTitle>{props.selectedDish.dish.title}</DishTitle>
+          <DishComposition>
+            {props.selectedDish.dish.composition}
+          </DishComposition>
+          <Hint>В 100 г продукта содержится:</Hint>
+          {props.selectedDish.dish.foodValue && (
+            <FlexWithSpacing spacing={'38px'}>
+              <Hint>Белки: {props.selectedDish.dish.foodValue!.protein}</Hint>
+              <Hint>Жиры: {props.selectedDish.dish.foodValue!.fats}</Hint>
+              <Hint>Углеводы: {props.selectedDish.dish.foodValue!.carb}</Hint>
+              <Hint>{props.selectedDish.dish.foodValue!.energyValue}</Hint>
+            </FlexWithSpacing>
+          )}
+        </ColumnFlexbox>
+
+        <ColumnFlexbox style={{ alignItems: 'flex-end' }}>
+          <CloseIcon onClick={onDeleteButtonClick} />
+          <WeightAndPrice spacing={'3px'}>
+            <TextRegular>{props.selectedDish.dish.weight} г.</TextRegular>
+            <PriceText>
+              {getSelectedDishPrice(props.selectedDish)} {ruble}
+            </PriceText>
+          </WeightAndPrice>
+        </ColumnFlexbox>
+      </Description>
+    </>
   );
 };
 
@@ -109,12 +143,14 @@ const CounterComponent = styled(CenteredFlex)`
 `;
 
 const Minus = styled(CenteredFlex)`
+  cursor: pointer;
   width: 40px;
   height: 100%;
   border-right: 1px solid #c4c4c4;
 `;
 
 const Plus = styled(CenteredFlex)`
+  cursor: pointer;
   width: 40px;
   height: 100%;
   border-left: 1px solid #c4c4c4;

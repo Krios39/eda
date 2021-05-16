@@ -16,21 +16,23 @@ import {
   mainWhite,
 } from '../../themes/colors';
 import { useSelector } from 'react-redux';
-import { selectMenu } from '../../../store/profile/selectors';
+import { selectSelectedDishes } from '../../../store/profile/selectors';
+import { getOrderPrice } from 'store/profile/helpers';
 
 export function OrderPage() {
-  // const menu = useSelector(selectMenu);
+  const selectedDishes = useSelector(selectSelectedDishes);
 
-  const menu = [];
   return (
     <Page alignItems={'flex-end'}>
       <OrderList spacing={'10px'}>
-        {/*{menu.map((dish, index) => (*/}
-        {/*  <Order key={dish.id} dish={dish} />*/}
-        {/*))}*/}
+        {selectedDishes.map(dish => (
+          <Order key={dish.dish.id} selectedDish={dish} />
+        ))}
       </OrderList>
       <Total spacing={'20px'}>
-        <TotalText>Общая сумма заказа: 228 {ruble}</TotalText>
+        <TotalText>
+          Общая сумма заказа: {getOrderPrice(selectedDishes)} {ruble}
+        </TotalText>
         <AcceptButton>Подтвердить</AcceptButton>
       </Total>
     </Page>

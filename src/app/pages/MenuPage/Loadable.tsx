@@ -1,5 +1,5 @@
 /**
- * Asynchronously loads the component for MenuPage
+ * Asynchronousy lloads the component for MenuPage
  */
 
 import { lazyLoad } from 'utils/loadable';

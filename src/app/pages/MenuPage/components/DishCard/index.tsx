@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dish } from 'store/models/dish';
 import styled from 'styled-components';
 import {
@@ -14,9 +14,39 @@ import {
 } from '../../../../constants/sizes';
 import { mainWhite } from '../../../../themes/colors';
 import { NutritionalValue } from '../../../../../store/models/nutritionalValue';
-import { Header, Hint, TextRegular } from '../../../../typography/text';
+import { Hint, TextRegular } from '../../../../typography/text';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectSelectedDishes } from '../../../../../store/profile/selectors';
+import { profileSlice } from '../../../../../store/profile/slice';
+import { isThisDishInOrder } from 'store/profile/helpers';
+import PlusCircleIcon from '../../../../icons/plus_circle.svg';
+import PlusCircleHoverIcon from '../../../../icons/plus_circle_hover.svg';
+import CheckCircleIcon from '../../../../icons/check_circle.svg';
+import CheckCircleHoverIcon from '../../../../icons/check_circle_hover.svg';
+
+enum DishStatus {
+  Regular,
+  RegularHover,
+  Selected,
+  SelectedHover,
+}
 
 export function DishCard(props: { dish: Dish }) {
+  const dispatch = useDispatch();
+  const selectedDishes = useSelector(selectSelectedDishes);
+
+  const [dishStatus, setDishStatus] = useState<DishStatus>(DishStatus.Regular);
+
+  const onAddButtonClick = () => {
+    if (isThisDishInOrder(props.dish, selectedDishes)) {
+      dispatch(profileSlice.actions.removeDish({ dish: props.dish }));
+      setDishStatus(DishStatus.Regular);
+    } else {
+      dispatch(profileSlice.actions.selectDish({ dish: props.dish }));
+      setDishStatus(DishStatus.Selected);
+    }
+  };
+
   return (
     <DishCardComponent>
       <Image src={props.dish.image} />
@@ -33,7 +63,11 @@ export function DishCard(props: { dish: Dish }) {
         )}
         <VerticallyCenteredFlexWithSpaceBetween style={{ width: '100%' }}>
           <PriceText>{props.dish.price} ₽</PriceText>
-          <AddDishButton />
+          <AddDishButton
+            onClick={onAddButtonClick}
+            dishStatus={dishStatus}
+            setDishStatus={setDishStatus}
+          />
         </VerticallyCenteredFlexWithSpaceBetween>
       </DishInfo>
     </DishCardComponent>
@@ -108,17 +142,51 @@ const NutritionalValuesComponent = styled(ColumnFlexWithPadding)`
   width: 100%;
 `;
 
-const AddDishButton = (props: { onClick?: () => void }) => {
+const AddDishButton = (props: {
+  onClick?: () => void;
+  dishStatus: DishStatus;
+  setDishStatus: (DishStatus: (prev) => DishStatus) => void;
+}) => {
+  const [isHover, setIsHover] = useState<boolean>(false);
+
+  useEffect(() => {
+    props.setDishStatus(prev => {
+      return getNewStatus(prev);
+    });
+  }, [isHover]);
+
+  const getNewStatus = (prevStatus: DishStatus): DishStatus => {
+    return prevStatus === DishStatus.Regular ||
+      prevStatus === DishStatus.RegularHover
+      ? isHover
+        ? DishStatus.RegularHover
+        : DishStatus.Regular
+      : isHover
+      ? DishStatus.SelectedHover
+      : DishStatus.Selected;
+  };
+
+  const DishStatusButton = {
+    [DishStatus.Regular]: PlusCircleIcon,
+    [DishStatus.RegularHover]: PlusCircleHoverIcon,
+    [DishStatus.Selected]: CheckCircleIcon,
+    [DishStatus.SelectedHover]: CheckCircleHoverIcon,
+  };
+
   return (
-    <AddButtonWrapper onClick={props.onClick}>
-      <Header color={'#0079C2'}>+</Header>
-    </AddButtonWrapper>
+    <CenteredFlex
+      onMouseLeave={() => setIsHover(false)}
+      onMouseEnter={() => setIsHover(true)}
+      onClick={props.onClick}
+    >
+      <AddButton background={DishStatusButton[props.dishStatus]} />
+    </CenteredFlex>
   );
 };
 
-const AddButtonWrapper = styled(CenteredFlex)`
-  height: 27.5px;
-  width: 27.5px;
-  border-radius: 50%;
-  border: 2px solid #0079c2;
+const AddButton = styled(CenteredFlex)<{ background: string }>`
+  height: 30px;
+  width: 30px;
+  background: url(${props => props.background});
+  cursor: pointer;
 `;

@@ -1,9 +1,21 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { ColumnCenteredFlex } from '../../typography/flex';
 import { Toolbar } from '../Toolbar';
 import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { profileSlice } from 'store/profile/slice';
 
 export function Page(props: { children: ReactNode; alignItems?: string }) {
+  // @ts-ignore
+  let { id } = useParams();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(id);
+    dispatch(profileSlice.actions.loadProfileId(id));
+  }, []);
+
   return (
     <PageComponent alignItems={props.alignItems}>
       <Toolbar />

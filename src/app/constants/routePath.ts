@@ -1,6 +1,6 @@
 import { Tab } from './tab';
 
-export const Route = {
-  [Tab.Menu]: '/',
+export const RoutePath = {
+  [Tab.Menu]: '/menu',
   [Tab.Order]: '/order',
 };

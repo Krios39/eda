@@ -15,3 +15,13 @@ export const selectMenu = createSelector(selectProfileState, x =>
 export const selectDishCategories = createSelector(selectMenu, x =>
   Object.keys(x),
 );
+
+export const selectSelectedDishes = createSelector(
+  selectProfileState,
+  x => x.selectedDishes,
+);
+
+export const selectUserId = createSelector(
+  selectProfileState,
+  x => x.userData.userId,
+);

@@ -13,9 +13,22 @@ import { ReactComponent as SoupIcon } from '../../icons/bowl.svg';
 import { ReactComponent as OrderIcon } from '../../icons/mall-bag.svg';
 import { ReactComponent as CalendarIcon } from '../../icons/calendar.svg';
 import { useHistory, useLocation } from 'react-router-dom';
-import { Route } from '../../constants/route';
+import { RoutePath } from '../../constants/routePath';
+import { format, getDay } from 'date-fns';
+import { useSelector } from 'react-redux';
+import { selectUserId } from '../../../store/profile/selectors';
 
 export function Toolbar() {
+  const getDayOfWeek = {
+    0: 'Воскресенье',
+    1: 'Понедельник',
+    2: 'Вторник',
+    3: 'Среда',
+    4: 'Четверг',
+    5: 'Пятница',
+    6: 'Суббота',
+  };
+
   return (
     <ToolbarComponent>
       <Tabs spacing={'140px'}>
@@ -26,7 +39,11 @@ export function Toolbar() {
         </CenteredFlexWithSpacing>
       </Tabs>
       <CenteredFlexWithSpacing spacing={'0.5rem'}>
-        <CalendarIcon /> <Today>Понедельник 26.04</Today>
+        <CalendarIcon />{' '}
+        <Today>{`${getDayOfWeek[getDay(new Date())]} ${format(
+          new Date(),
+          'dd.MM',
+        )}`}</Today>
       </CenteredFlexWithSpacing>
     </ToolbarComponent>
   );
@@ -60,14 +77,23 @@ const TabItem = (props: { tab: Tab }) => {
   const history = useHistory();
   const location = useLocation();
 
+  const userId = useSelector(selectUserId);
   return (
     <CenteredFlexWithSpacing
-      onClick={() => history.push(props.tab === Tab.Menu ? '/' : '/order')}
+      onClick={() =>
+        history.push(
+          props.tab.includes(Tab.Menu)
+            ? `${RoutePath[Tab.Menu]}/${userId}`
+            : `${RoutePath[Tab.Order]}/${userId}`,
+        )
+      }
       spacing={'9px'}
     >
-      {props.tab === Tab.Menu && <SoupIcon />}
-      {props.tab === Tab.Order && <OrderIcon />}
-      <TabItemComponentText isSelected={Route[props.tab] === location.pathname}>
+      {props.tab.includes(Tab.Menu) && <SoupIcon />}
+      {props.tab.includes(Tab.Order) && <OrderIcon />}
+      <TabItemComponentText
+        isSelected={location.pathname.includes(RoutePath[props.tab])}
+      >
         <Header color={mainBlack}>{props.tab}</Header>
       </TabItemComponentText>
     </CenteredFlexWithSpacing>
