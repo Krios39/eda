@@ -35,7 +35,6 @@ export const profileSlice = createSlice({
     },
     loadDishesFailure(state, action) {
       state.loading = false;
-      console.log('PHOBLEMS');
       return state;
     },
     selectDish(state, action: PayloadAction<DishPayload>) {
@@ -46,25 +45,28 @@ export const profileSlice = createSlice({
       return state;
     },
     removeDish(state, action: PayloadAction<DishPayload>) {
+      console.log(state.selectedDishes.filter(dish => console.log(dish)));
       state.selectedDishes = state.selectedDishes.filter(
-        n => n.dish.id !== action.payload.dish.id,
+        n => n.dish.dishId !== action.payload.dish.dishId,
       );
       return state;
     },
     addPortion(state, action: PayloadAction<DishPayload>) {
       state.selectedDishes.find(
-        n => n.dish.id === action.payload.dish.id,
+        n => n.dish.dishId === action.payload.dish.dishId,
       )!.count =
-        state.selectedDishes.find(n => n.dish.id === action.payload.dish.id)!
-          .count + 1;
+        state.selectedDishes.find(
+          n => n.dish.dishId === action.payload.dish.dishId,
+        )!.count + 1;
       return state;
     },
     removePortion(state, action: PayloadAction<DishPayload>) {
       state.selectedDishes.find(
-        n => n.dish.id === action.payload.dish.id,
+        n => n.dish.dishId === action.payload.dish.dishId,
       )!.count =
-        state.selectedDishes.find(n => n.dish.id === action.payload.dish.id)!
-          .count - 1;
+        state.selectedDishes.find(
+          n => n.dish.dishId === action.payload.dish.dishId,
+        )!.count - 1;
       return state;
     },
     loadProfileId(state, action) {

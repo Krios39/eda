@@ -37,6 +37,12 @@ export function DishCard(props: { dish: Dish }) {
 
   const [dishStatus, setDishStatus] = useState<DishStatus>(DishStatus.Regular);
 
+  useEffect(() => {
+    if (isThisDishInOrder(props.dish, selectedDishes))
+      setDishStatus(DishStatus.Selected);
+    else setDishStatus(DishStatus.Regular);
+  }, []);
+
   const onAddButtonClick = () => {
     if (isThisDishInOrder(props.dish, selectedDishes)) {
       dispatch(profileSlice.actions.removeDish({ dish: props.dish }));
@@ -51,16 +57,20 @@ export function DishCard(props: { dish: Dish }) {
     <DishCardComponent>
       <Image src={props.dish.image} />
       <DishInfo>
-        <DishTitle>{props.dish.title}</DishTitle>
-        {props.dish.composition && (
-          <DishComposition>{props.dish.composition}</DishComposition>
-        )}
-        {(props.dish.foodValue || props.dish.weight) && (
-          <NutritionalValueBox
-            nutritionalValue={props.dish.foodValue}
-            weight={props.dish.weight}
-          />
-        )}
+        <>
+          <DishTitle>{props.dish.title}</DishTitle>
+          {props.dish.description && (
+            <DishComposition>
+              {props.dish.description[0].content}
+            </DishComposition>
+          )}
+          {(props.dish.foodValue || props.dish.weight) && (
+            <NutritionalValueBox
+              nutritionalValue={props.dish.foodValue}
+              weight={props.dish.weight}
+            />
+          )}
+        </>
         <VerticallyCenteredFlexWithSpaceBetween style={{ width: '100%' }}>
           <PriceText>{props.dish.price} ₽</PriceText>
           <AddDishButton
@@ -102,7 +112,9 @@ const DishComposition = styled.span`
   margin-top: 26px;
 `;
 
-const DishInfo = styled(ColumnCenteredFlex)`
+const DishInfo = styled(VerticallyCenteredFlexWithSpaceBetween)`
+  flex-direction: column;
+  height: 100%;
   padding: 10px;
   width: 100%;
 `;
@@ -123,16 +135,16 @@ const NutritionalValueBox = (props: {
         <>
           <Hint>В 100 г продукта содержится:</Hint>
           <VerticallyCenteredFlexWithSpaceBetween>
-            <Hint>Белки: {props.nutritionalValue.protein}</Hint>
-            <Hint>Жиры: {props.nutritionalValue.fats}</Hint>
+            <Hint>{props.nutritionalValue.protein}</Hint>
+            <Hint>{props.nutritionalValue.fats}</Hint>
           </VerticallyCenteredFlexWithSpaceBetween>
           <VerticallyCenteredFlexWithSpaceBetween>
-            <Hint>Углеводы: {props.nutritionalValue.carb}</Hint>
+            <Hint>{props.nutritionalValue.carb}</Hint>
             <Hint>{props.nutritionalValue.energyValue}</Hint>
           </VerticallyCenteredFlexWithSpaceBetween>
         </>
       )}
-      {props.weight && <TextRegular>{props.weight} г.</TextRegular>}
+      {props.weight && <TextRegular>{props.weight}</TextRegular>}
     </NutritionalValuesComponent>
   );
 };

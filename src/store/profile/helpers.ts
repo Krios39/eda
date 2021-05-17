@@ -5,7 +5,7 @@ export const isThisDishInOrder = (
   dish: Dish,
   selectedDishes: SelectedDish[],
 ) => {
-  return selectedDishes.find(n => n.dish === dish);
+  return selectedDishes.find(n => n.dish.dishId === dish.dishId);
 };
 
 export const getSelectedDishPrice = (selectedDish: SelectedDish) => {

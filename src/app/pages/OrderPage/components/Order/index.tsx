@@ -107,14 +107,14 @@ const DishCard = (props: { selectedDish: SelectedDish }) => {
         <ColumnFlexbox>
           <DishTitle>{props.selectedDish.dish.title}</DishTitle>
           <DishComposition>
-            {props.selectedDish.dish.composition}
+            {props.selectedDish.dish.description[0].content}
           </DishComposition>
           <Hint>В 100 г продукта содержится:</Hint>
           {props.selectedDish.dish.foodValue && (
             <FlexWithSpacing spacing={'38px'}>
-              <Hint>Белки: {props.selectedDish.dish.foodValue!.protein}</Hint>
-              <Hint>Жиры: {props.selectedDish.dish.foodValue!.fats}</Hint>
-              <Hint>Углеводы: {props.selectedDish.dish.foodValue!.carb}</Hint>
+              <Hint>{props.selectedDish.dish.foodValue!.protein}</Hint>
+              <Hint>{props.selectedDish.dish.foodValue!.fats}</Hint>
+              <Hint>{props.selectedDish.dish.foodValue!.carb}</Hint>
               <Hint>{props.selectedDish.dish.foodValue!.energyValue}</Hint>
             </FlexWithSpacing>
           )}
@@ -123,7 +123,7 @@ const DishCard = (props: { selectedDish: SelectedDish }) => {
         <ColumnFlexbox style={{ alignItems: 'flex-end' }}>
           <CloseIcon onClick={onDeleteButtonClick} />
           <WeightAndPrice spacing={'3px'}>
-            <TextRegular>{props.selectedDish.dish.weight} г.</TextRegular>
+            <TextRegular>{props.selectedDish.dish.weight}</TextRegular>
             <PriceText>
               {getSelectedDishPrice(props.selectedDish)} {ruble}
             </PriceText>
