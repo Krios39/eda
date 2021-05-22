@@ -194,14 +194,7 @@ import { Categories } from './components/Categories';
 // ];
 
 export function MenuPage() {
-  const dispatch = useDispatch();
-
   const [refs, setRefs] = useState<RefObject<HTMLDivElement>[]>([]);
-
-  useEffect(() => {
-    dispatch(profileSlice.actions.loadDishes());
-    // dispatch(profileSlice.actions.loadDishesSuccess({ dishes: dishes }));
-  }, []);
 
   return (
     <Page>

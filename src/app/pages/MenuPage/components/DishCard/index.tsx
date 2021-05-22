@@ -12,7 +12,7 @@ import {
   dishCardImageWidth,
   dishCardWidth,
 } from '../../../../constants/sizes';
-import { mainWhite } from '../../../../themes/colors';
+import { mainBorder, mainWhite } from '../../../../themes/colors';
 import { NutritionalValue } from '../../../../../store/models/nutritionalValue';
 import { Hint, TextRegular } from '../../../../typography/text';
 import { useDispatch, useSelector } from 'react-redux';
@@ -94,6 +94,10 @@ const DishCardComponent = styled(ColumnCenteredFlex)`
   background-color: ${mainWhite};
   justify-content: flex-start;
   margin-bottom: 20px;
+  background: ${mainWhite};
+  border: 1px solid ${mainBorder};
+  border-radius: 8px;
+  overflow: hidden;
   :nth-child(3n) {
     margin-right: 0 !important;
   }

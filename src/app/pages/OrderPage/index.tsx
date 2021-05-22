@@ -23,24 +23,19 @@ import { Modal } from '../../modals/Modal';
 
 export function OrderPage() {
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState<boolean>(false);
-
   const selectedDishes = useSelector(selectSelectedDishes);
 
   return (
-    <Page alignItems={'flex-end'}>
+    <Page>
       <OrderList spacing={'10px'}>
         {selectedDishes.map(selectedDish => (
           <Order key={selectedDish.dish.dishId} selectedDish={selectedDish} />
         ))}
       </OrderList>
-      <Total spacing={'20px'}>
-        <TotalText>
-          Общая сумма заказа: {getOrderPrice(selectedDishes)} {ruble}
-        </TotalText>
-        <AcceptButton onClick={() => setIsAcceptModalOpen(true)}>
-          Подтвердить
-        </AcceptButton>
-      </Total>
+      <Total
+        sum={getOrderPrice(selectedDishes)}
+        onAcceptButtonClick={() => setIsAcceptModalOpen(true)}
+      />
 
       <AcceptModal
         isOpen={isAcceptModalOpen}
@@ -54,8 +49,8 @@ const OrderList = styled(ColumnCenteredFlexWithPadding)`
   width: 100%;
 `;
 
-const Total = styled(ColumnFlexWithPadding)`
-  justify-content: flex-end;
+const TotalComponent = styled(ColumnFlexWithPadding)`
+  margin-left: auto;
   margin-top: 20px;
   margin-bottom: 80px;
 `;
@@ -82,6 +77,19 @@ const AcceptButton = styled(CenteredFlex)`
     background-color: ${buttonBackgroundClick};
   }
 `;
+
+const Total = (props: { onAcceptButtonClick: () => void; sum: number }) => {
+  return (
+    <TotalComponent spacing={'20px'}>
+      <TotalText>
+        Общая сумма заказа: {props.sum} {ruble}
+      </TotalText>
+      <AcceptButton onClick={props.onAcceptButtonClick}>
+        Подтвердить
+      </AcceptButton>
+    </TotalComponent>
+  );
+};
 
 const AcceptModal = (props: { isOpen: boolean; onClose: () => void }) => {
   return (

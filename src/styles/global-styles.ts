@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import { mainBackGround } from '../app/themes/colors';
+import background from '../app/images/background.svg';
 
 export const GlobalStyle = createGlobalStyle`
   html,
@@ -10,7 +10,7 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     font-family: Roboto, 'Roboto', sans-serif;
-    background-color:${mainBackGround};
+    background: url(${background});
   }
 
   #root {

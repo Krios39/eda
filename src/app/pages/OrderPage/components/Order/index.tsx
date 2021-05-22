@@ -18,6 +18,7 @@ import { SelectedDish } from '../../../../../store/models/selectedDish';
 import { useDispatch } from 'react-redux';
 import { profileSlice } from '../../../../../store/profile/slice';
 import { getSelectedDishPrice } from '../../../../../store/profile/helpers';
+import { mainBorder, mainWhite } from 'app/themes/colors';
 
 export function Order(props: { selectedDish: SelectedDish }) {
   return (
@@ -42,8 +43,11 @@ const WeightAndPrice = styled(ColumnFlexWithPadding)`
 `;
 
 const OrderComponent = styled(Flexbox)`
-  border: 1px solid #c4c4c4;
+  border: 1px solid ${mainBorder};
   width: 100%;
+  background: ${mainWhite};
+  border-radius: 8px;
+  overflow: hidden;
 `;
 
 const Image = styled.img`
@@ -54,7 +58,7 @@ const Image = styled.img`
 const CounterBox = styled(CenteredFlex)`
   width: 230px;
   margin: 6px 0;
-  border-left: 1px solid #c4c4c4;
+  border-left: 1px solid ${mainBorder};
   padding: 0 50px;
 `;
 
@@ -138,7 +142,7 @@ const CounterComponent = styled(CenteredFlex)`
   width: 126px;
   height: 40px;
   justify-content: space-between;
-  border: 1px solid #c4c4c4;
+  border: 1px solid ${mainBorder};
   border-radius: 7px;
 `;
 
@@ -146,14 +150,14 @@ const Minus = styled(CenteredFlex)`
   cursor: pointer;
   width: 40px;
   height: 100%;
-  border-right: 1px solid #c4c4c4;
+  border-right: 1px solid ${mainBorder};
 `;
 
 const Plus = styled(CenteredFlex)`
   cursor: pointer;
   width: 40px;
   height: 100%;
-  border-left: 1px solid #c4c4c4;
+  border-left: 1px solid ${mainBorder};
 `;
 
 const Description = styled(VerticallyCenteredFlexWithSpaceBetween)`

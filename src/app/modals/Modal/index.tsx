@@ -2,11 +2,12 @@ import React from 'react';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { BaseModal, BaseModalProps } from '../BaseModal';
+import { modalZIndex } from 'app/constants/zIndex';
 import {
+  mainBorder,
   modalBackground,
   modalBackgroundOutsideDefault,
-} from '../../constants/colors';
-import { modalZIndex } from 'app/constants/zIndex';
+} from 'app/themes/colors';
 
 export const Modal = (
   props: BaseModalProps & {
@@ -67,5 +68,5 @@ const ModalComponent = styled(BaseModal)<{
 
   user-select: none;
   box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.2), 0px 4px 100px rgba(0, 0, 0, 0.05);
-  border: 1px solid #c4c4c4;
+  border: 1px solid ${mainBorder};
 `;
