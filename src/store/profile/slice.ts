@@ -73,5 +73,15 @@ export const profileSlice = createSlice({
       state.userData.userId = action.payload;
       return state;
     },
+    sendOrder(state) {
+      state.loading = true;
+      return state;
+    },
+    sendOrderSuccess(state) {
+      return state;
+    },
+    sendOrderFailure(state) {
+      return state;
+    },
   },
 });
