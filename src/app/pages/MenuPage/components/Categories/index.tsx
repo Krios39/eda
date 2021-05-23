@@ -30,7 +30,7 @@ export function Categories(props: {
 }
 
 const Dishes = styled(FlexWithSpacing)`
-  width: calc(3 * ${dishCardImageWidth} + 2 * 58px);
+  //width: calc(3 * ${dishCardImageWidth} + 2 * 58px);
   flex-wrap: wrap;
 `;
 

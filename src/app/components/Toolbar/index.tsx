@@ -17,6 +17,7 @@ import { RoutePath } from '../../constants/routePath';
 import { format, getDay } from 'date-fns';
 import { useSelector } from 'react-redux';
 import { selectUserId } from '../../../store/profile/selectors';
+import { toolbarZIndex } from '../../constants/zIndex';
 
 export function Toolbar() {
   const getDayOfWeek = {
@@ -53,6 +54,7 @@ const ToolbarComponent = styled(VerticallyCenteredFlexWithSpaceBetween)`
   width: 100%;
   margin-bottom: 4rem;
   align-items: flex-end;
+  z-index: ${toolbarZIndex};
 `;
 
 const Tabs = styled(CenteredFlexWithSpacing)`

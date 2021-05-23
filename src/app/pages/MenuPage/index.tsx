@@ -1,15 +1,14 @@
 import { Page } from 'app/components/Page';
 import * as React from 'react';
-import { Helmet } from 'react-helmet-async';
+import { RefObject, useState } from 'react';
 import styled from 'styled-components';
-import { Flexbox } from '../../typography/flex';
+import { ColumnCenteredFlex, Flexbox } from '../../typography/flex';
 import { CategoriesList } from './components/CategoriesList';
-import { useDispatch } from 'react-redux';
-import { RefObject, useEffect, useState } from 'react';
-import { profileSlice } from '../../../store/profile/slice';
-import { Dish } from '../../../store/models/dish';
+import { useSelector } from 'react-redux';
 import { Categories } from './components/Categories';
-
+import { selectDishCategories } from '../../../store/profile/selectors';
+import noMenuImg from '../../images/no_menu.svg';
+import { Span } from 'app/typography/text';
 // const dishes: Dish[] = [
 //   {
 //     id: 1,
@@ -195,20 +194,49 @@ import { Categories } from './components/Categories';
 
 export function MenuPage() {
   const [refs, setRefs] = useState<RefObject<HTMLDivElement>[]>([]);
+  const categories = useSelector(selectDishCategories);
 
   return (
-    <Page>
-      <Helmet>
-        <title>Home Page</title>
-        <meta name="description" content="A Boilerplate application homepage" />
-      </Helmet>
-      <MenuPageContent>
-        <CategoriesList refs={refs} />
-        <Categories refs={refs} setRefs={setRefs} />
-      </MenuPageContent>
-    </Page>
+    <MenuPageComponent>
+      {/*<MenuPageContent>*/}
+      {categories.length ? (
+        <MenuPageContent>
+          <CategoriesList refs={refs} />
+          <Categories refs={refs} setRefs={setRefs} />
+        </MenuPageContent>
+      ) : (
+        <NoMenu />
+      )}
+      {/*</MenuPageContent>*/}
+    </MenuPageComponent>
   );
 }
+
+const MenuPageComponent = styled(Page)`
+  position: relative;
+`;
+
+const NoMenu = () => {
+  return (
+    <ColumnCenteredFlex>
+      <NoMenuImage />
+      <NoMenuText>Сегодня блюд нет, приходите позднее</NoMenuText>
+    </ColumnCenteredFlex>
+  );
+};
+
+const NoMenuImage = styled.div`
+  height: 778px;
+  width: 662px;
+  background: url(${noMenuImg});
+  position: absolute;
+  top: 30px;
+`;
+
+const NoMenuText = styled(Span)`
+  font-size: 30px;
+  line-height: 35px;
+`;
 
 const MenuPageContent = styled(Flexbox)`
   width: 100%;

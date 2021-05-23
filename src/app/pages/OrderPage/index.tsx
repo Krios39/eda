@@ -5,6 +5,7 @@ import {
   CenteredFlexWithSpacing,
   ColumnCenteredFlexWithPadding,
   ColumnFlexWithPadding,
+  Flexbox,
 } from '../../typography/flex';
 import styled from 'styled-components';
 import { Order } from './components/Order';
@@ -20,6 +21,8 @@ import { useSelector } from 'react-redux';
 import { selectSelectedDishes } from '../../../store/profile/selectors';
 import { getOrderPrice } from 'store/profile/helpers';
 import { Modal } from '../../modals/Modal';
+import noOrderImage from '../../images/no_order.svg';
+import { useParams } from 'react-router-dom';
 
 export function OrderPage() {
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState<boolean>(false);
@@ -27,15 +30,24 @@ export function OrderPage() {
 
   return (
     <Page>
-      <OrderList spacing={'10px'}>
-        {selectedDishes.map(selectedDish => (
-          <Order key={selectedDish.dish.dishId} selectedDish={selectedDish} />
-        ))}
-      </OrderList>
-      <Total
-        sum={getOrderPrice(selectedDishes)}
-        onAcceptButtonClick={() => setIsAcceptModalOpen(true)}
-      />
+      {selectedDishes.length ? (
+        <>
+          <OrderList spacing={'10px'}>
+            {selectedDishes.map(selectedDish => (
+              <Order
+                key={selectedDish.dish.dishId}
+                selectedDish={selectedDish}
+              />
+            ))}
+          </OrderList>
+          <Total
+            sum={getOrderPrice(selectedDishes)}
+            onAcceptButtonClick={() => setIsAcceptModalOpen(true)}
+          />
+        </>
+      ) : (
+        <EmptyOrder />
+      )}
 
       <AcceptModal
         isOpen={isAcceptModalOpen}
@@ -44,6 +56,44 @@ export function OrderPage() {
     </Page>
   );
 }
+
+const EmptyOrder = () => {
+  // @ts-ignore
+  let { id } = useParams();
+
+  return (
+    <EmptyOrderComponent>
+      <EmptyOrderText>
+        Вы еще ничего не выбрали, перейдите в{' '}
+        <a href={`http://localhost:3000/menu/${id}`}>меню</a>, чтобы добавить
+        блюдо
+      </EmptyOrderText>
+      <EmptyOrderImg />
+    </EmptyOrderComponent>
+  );
+};
+
+const EmptyOrderComponent = styled(Flexbox)`
+  height: 700px;
+  align-items: center;
+`;
+
+const EmptyOrderText = styled(Span)`
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 35px;
+  width: 70%;
+  text-wrap: normal;
+`;
+
+const EmptyOrderImg = styled.div`
+  position: fixed;
+  right: 0;
+  top: 109px;
+  width: 705px;
+  height: 849px;
+  background: url(${noOrderImage});
+`;
 
 const OrderList = styled(ColumnCenteredFlexWithPadding)`
   width: 100%;

@@ -826,8 +826,8 @@ export function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // dispatch(profileSlice.actions.loadDishes());
-    dispatch(profileSlice.actions.loadDishesSuccess({ dishes: dishes }));
+    dispatch(profileSlice.actions.loadDishes());
+    // dispatch(profileSlice.actions.loadDishesSuccess({ dishes: dishes }));
   }, []);
   return (
     <BrowserRouter>
